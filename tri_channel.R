@@ -151,6 +151,7 @@ bar_width = median(ind$end - ind$start)
   ylab("Phase") +
   scale_x_reverse(breaks = pretty_breaks(10), labels = format_Mb) +
   scale_y_continuous(breaks = pretty_breaks(2), limits = c(-1.2,1.2)) +
+  scale_color_gradient(low = "red", high =  "blue") +
   theme_bw() +
   ggtitle(cell_ID) +
   theme(panel.spacing = unit(0.5, "lines"),
