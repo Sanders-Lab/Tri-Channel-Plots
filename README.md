@@ -1,2 +1,4 @@
 # tri-channel-plots
-Tool for tri-channel plotting of scTRIP single cell Strand-seq data.
+R code for tri-channel plotting of scTRIP single cell Strand-seq data.
+
+![trichannelplot](tri_channel_plot.png)
