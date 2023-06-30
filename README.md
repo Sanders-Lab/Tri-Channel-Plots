@@ -1,7 +1,7 @@
-# tri-channel-plots
+# Strand-seq Channel plots
 R functions for combinatorial data channel plotting of scTRIP single cell Strand-seq data.
 
-# 📆 Roadmap
+# Roadmap
 
 # 📕 Technical features
 
@@ -23,3 +23,7 @@ Example output plot:
 ![trichannelplot](tri_channel_plot.png)
 
 # 💂‍♂️ Authors
+- [Patrick Weidner](https://github.com/pweidner)
+- [Suharto Bannerjee](https://github.com/suhartobanerjee)
+
+Please contact us with any problems or submit them as an issue in this Github repository.
