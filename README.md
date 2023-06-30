@@ -4,7 +4,7 @@ R functions for combinatorial data channel plotting of scTRIP single cell Strand
 # Roadmap
 
 # 📕 Technical features
-- [ x] Make yaml file for conda env to launch into RStudio server on the cluster
+- [x] Make yaml file for conda env to launch into RStudio server on the cluster
 - [ ] Option to split H1 and H2 in seperate plots
 - [ ] Option to plot sv call track along the plotting region
 - [ ] General option to chose combination of channel plots through simple numeric ID (e.g. 3=classical trichannel, 4= same but split haps etc.)
