@@ -5,18 +5,16 @@ library(GenomicRanges)
 library(readr)
 library(tidyverse)
 library(cowplot)
-setwd('~/Documents/Data/Sequencing/AGLCD/P1530_rerun/') #scTRIP output folder
+setwd('/data/gpfs-1/users/pweidne_m/work/tri-channel-plots') #scTRIP output folder
 
 ## assign cell ID and region of interest/genomic range:
-cell_ID="P1530_i563_" # cell of interest
+cell_ID="i513" # cell of interest
 genomic_range = c(140000000:145000000) #plot ylim, like a padding around roi
 roi = c(142299011:142813287) #highlighted dotted line area in genomic_range
 chromosome = "chr7" #specify chromosome for whole chr filtering here
 
 ## load in template strand data for all cells from count folder in working dir
-File <- ('~/Documents/Data/Sequencing/AGLCD/P1530_rerun/counts/P1530/100000_fixed.txt.gz')
-inputFile <- paste0("zcat <", File)
-d = fread(cmd = inputFile) # reads in the file
+d <- fread("/data/gpfs-1/users/pweidne_m/work/tri-channel-plots/data/raw/AGLCD.txt.gz", )
 d <- merge(d, d[,.(total = sum(w+c)), by = cell], by = "cell")
 d <- merge(d, d[,.(mean = median(w+c)), by = cell], by = "cell")
 #d <- d[total > 1e5,] # filters based on minimum read number
@@ -26,10 +24,10 @@ ind <- d %>%
   filter(cell == cell_ID & start %in% genomic_range & chrom == chromosome)
 in.d <- melt(ind, measure.vars = c("c", "w"))
 
-#generate hap_data from haplotagData_plottingTable.R here
-haplotag.bams.path <- '~/Documents/Data/Sequencing/AGLCD/P1530_rerun/haplotag/bam/P1530/100000_fixed_norm.selected_j0.1_s0.5_scedist20/'
-haplotag.bams <- list.files(path = haplotag.bams.path, pattern = "\\.bam$", full.names = T)
-region<- paste0("chr", c(1:22, "X"))
+# #generate hap_data from haplotagData_plottingTable.R here
+# haplotag.bams.path <- '/data/gpfs-1/users/pweidne_m/work/tri-channel-plot'
+# haplotag.bams <- list.files(path = haplotag.bams.path, pattern = "\\.bam$", full.names = T)
+region <- paste0("chr", c(1:22, "X", "Y"))
 
 all.counts <- data.frame()
 
@@ -55,11 +53,11 @@ for (i in 1:length(haplotag.bams)) {
   all.counts<- rbind(all.counts, out.df)
 }
 
-write.table(all.counts, file = "~/Documents/Data/Sequencing/AGLCD/P1530_rerun/haplotag/P1530_singleCell_haplotagData.txt", quote = FALSE, row.names = FALSE)
+# write.table(all.counts, file = "~/Documents/Data/Sequencing/AGLCD/P1530_rerun/haplotag/P1530_singleCell_haplotagData.txt", quote = FALSE, row.names = FALSE)
 
 # read in the hap_data generated from haplotagData_plottingTable.R
 # d.hap<- as.data.table(read.table("/g/korbel2/StrandSeq/20180628_HaplotaggedData/C7/C7_singleCell_haplotagData.txt", header=T))
-d.hap <- read.table("~/Documents/Data/Sequencing/AGLCD/P1530_rerun/haplotag/P1530_singleCell_haplotagData.txt", sep = ' ',header = TRUE)
+d.hap <- read.table("data/proc/P1530_singleCell_haplotagData.txt", sep = ' ',header = TRUE)
 d.hap[nrow(d.hap)+1,] <- c(cell_ID, chromosome, min(genomic_range), min(genomic_range), 0, 0, 0)
 d.hap[nrow(d.hap)+1,] <- c(cell_ID, chromosome, max(genomic_range), max(genomic_range), 0, 0, 0)
 d.hap$chrom <- as.factor(d.hap$chrom)
