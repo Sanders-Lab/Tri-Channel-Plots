@@ -1,6 +1,6 @@
 ################################  HEADER  ####################################
 # Source functions
-source("../HaplotaggeR.R")
+source("./haplotagger_dev.R")
 
 # Check if BiocManager is installed
 if (!require("BiocManager", quietly = TRUE)) {
@@ -36,6 +36,7 @@ d <- as.data.frame(read_table(file = '/fast/groups/ag_sanders/scratch/kiwi_tmp/A
                               col_names = T))
 write.table(d,
             '../../data/raw/AGLCD.txt.gz')
+d <- fread('../../data/raw/AGLCD.txt.gz')
 d_dt <- as.data.table(d)
 d_dt
 
@@ -62,20 +63,26 @@ write.table(d.hap,
 #provide path to filename for output of the dataframe so you can load it next time, default is NULL
 
 ##############################################################################
+d.hap <- fread("../../data/proc/P1530_singleCell_haplotagData.txt")
 
 d.hap %>% head()
-
-
+d  %>% head()
+in.d$cell  %>% unique()
+in.d$
 
 
 
 ###############################  FUNCTION  ###################################
 #For now only works for whole chromosomes, so dont use plot_range please!
-plot_3channel_chr(cell_ID = "P1530_i412_", #keep string format!!!!
-                  roi = c(74000000:120000000), #highlight region with dotted lines, if not supplied vanishes
-                  plot_range = NULL, # DO NOT USE FOR NOW!!
-                  chromosome =  "chr2") #choose chromosome to plot
+tri_plot <- plot_trichannel(cell_ID = "i563", #keep string format!!!!
+                  roi = NULL, #highlight region with dotted lines, if not supplied vanishes
+                  plot_range = c(74000000:120000000), # DO NOT USE FOR NOW!!
+                  chromosome =  "chr7") #choose chromosome to plot
 ##############################################################################
+
+pdf("../../plots/tmp_plot.pdf")
+plot(tri_plot)
+dev.off()
 
 
 ###############################   SAVING   ###################################

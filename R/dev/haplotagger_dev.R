@@ -194,8 +194,9 @@ if (is.null(plot_range)) {
       ggtitle(cell_ID) +
       xlab("Genomic position")+
       ylab("W:C ratio")+
-      scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb) +
+      scale_x_continuous(n.breaks = 10, labels = format_Mb) +
       scale_y_continuous(breaks = c(0,0.5,1.0)) +
+      xlim(c(min(plot_range), max(plot_range))) +
       theme_bw() +
       theme(panel.spacing = unit(0.4, "lines"),
             strip.placement = 'outside',
@@ -220,8 +221,9 @@ if (is.null(plot_range)) {
       # formatting
       coord_flip(expand = F) +
       xlab("Genomic Position")+ylab("Depth") +
-      scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb) +
+      scale_x_continuous(n.breaks = 10, labels = format_Mb) +
       scale_y_continuous(breaks = pretty_breaks(5), limits = c(0, y_lim)) + 
+      xlim(c(min(plot_range), max(plot_range))) +
       theme_bw() +
       theme(panel.spacing = unit(0.4, "lines"),
             axis.title.y = element_blank(),
@@ -249,8 +251,9 @@ if (is.null(plot_range)) {
      coord_flip(expand = F)  +
      #formatting
      ylab("H1") +
-     scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb) +
+     scale_x_continuous(n.breaks = 10, labels = format_Mb) +
      scale_y_continuous(breaks = pretty_breaks(2), limits = c(-1.2,1.2)) +
+     xlim(c(min(plot_range), max(plot_range))) +
      theme_bw() +
      theme(panel.spacing = unit(0.4, "lines"),
            axis.title.y = element_blank(),
@@ -278,8 +281,9 @@ if (is.null(plot_range)) {
      coord_flip(expand = F)  +
      #formatting
      ylab("H2") +
-     scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb) +
+     scale_x_continuous(n.breaks = 10, labels = format_Mb) +
      scale_y_continuous(breaks = pretty_breaks(2), limits = c(-1.2,1.2)) +
+     xlim(c(min(plot_range), max(plot_range))) +
      theme_bw() +
      theme(panel.spacing = unit(0.4, "lines"),
            axis.title.y = element_blank(),
