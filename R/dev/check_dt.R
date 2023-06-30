@@ -34,6 +34,8 @@ library(data.table)
 # Load count data for all cells
 d <- as.data.frame(read_table(file = '/fast/groups/ag_sanders/scratch/kiwi_tmp/AGLCD_hg38_hgsvc/AGLCD/counts/AGLCD.txt.gz',
                               col_names = T))
+write.table(d,
+            '../../data/raw/AGLCD.txt.gz')
 d_dt <- as.data.table(d)
 d_dt
 
@@ -54,9 +56,17 @@ d.hap <- haplotaggeR(haplotag.bams.path = "/fast/groups/ag_sanders/scratch/kiwi_
                      chromosomes = paste0("chr", c(1:22, "X")),
                      #here I run all chromosomes, default is all chr so you can skip this if wanted
                      output = "./P1530_singleCell_haplotagData.txt") 
+write.table(d.hap,
+            "../../data/proc/P1530_singleCell_haplotagData.txt"
+)
 #provide path to filename for output of the dataframe so you can load it next time, default is NULL
 
 ##############################################################################
+
+d.hap %>% head()
+
+
+
 
 
 ###############################  FUNCTION  ###################################
