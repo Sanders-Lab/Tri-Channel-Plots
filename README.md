@@ -23,7 +23,7 @@ R functions for combinatorial data channel plotting of scTRIP single cell Strand
 
 Example output plot:
 
-![trichannelplot](tri_channel_plot.png)
+![trichannelplot](example_cell.png)
 
 # 💂‍♂️ Authors
 - [Patrick Weidner](https://github.com/pweidner)
