@@ -25,7 +25,7 @@ Example output plot:
 
 ![trichannelplot](example_cell.png)
 
-# 💂‍♂️ Authors
+# Authors
 - [Patrick Weidner](https://github.com/pweidner)
 - [Suharto Bannerjee](https://github.com/suhartobanerjee)
 
