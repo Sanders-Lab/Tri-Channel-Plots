@@ -28,5 +28,6 @@ Example output plot:
 # Authors
 - [Patrick Weidner](https://github.com/pweidner)
 - [Suharto Bannerjee](https://github.com/suhartobanerjee)
+- David Porubsky wrote some of the functions were sourcing!
 
 Please contact us with any problems or submit them as an issue in this Github repository.
