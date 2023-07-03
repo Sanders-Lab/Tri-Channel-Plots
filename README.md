@@ -1,6 +1,25 @@
 # Strand-seq Channel plots
 R functions for combinatorial data channel plotting of scTRIP single cell Strand-seq data.
 
+# Usage
+1. Clone the repository
+
+```bash
+git clone https://github.com/pweidner/tri-channel-plots
+```
+2. Launch plot_channels function from run_script.R
+
+Input files:
+- d <- scTRIP counts output file (e.g. AGLCD.txt.gz)
+- d.hap <- run haplotagger on bam files in the haplotag folder or import such table
+
+Function Parameters:
+- cell_ID (e.g. "i504")
+- chromosome (e.g. "chr2")
+- channels (e.g. 1-4)
+- plot_range (e.g. c(40000000,120000000))
+- roi (e.g. c(7500000,85000000)
+- 
 # Roadmap
 
 # 📕 Technical features
