@@ -141,8 +141,8 @@ bar_width = median(ind$end - ind$start)
   ### REPLACED WITH LINE+BALL 
   geom_linerange(data=in.d.hap[in.d.hap$w!=0,], aes(ymin=0, ymax=-w, color=hp), size=1.5, alpha=0.3) + # SNPs on W reads (right)
   geom_linerange(data=in.d.hap[in.d.hap$c!=0,], aes(ymin=0, ymax=c, color=hp), size=1.5, alpha=0.3) + # SNPs on C reads (left)
-  geom_point(data=in.d.hap[in.d.hap$w!=0,], aes(y=-w, color=hp), size=2) +
-  geom_point(data=in.d.hap[in.d.hap$c!=0,],aes(y=c, color=hp), size=2) +
+  geom_point(data=in.d.hap[in.d.hap$w!=0,], aes(y=-w, color=hp), size=3) +
+  geom_point(data=in.d.hap[in.d.hap$c!=0,],aes(y=c, color=hp), size=3) +
   geom_vline(xintercept = c(min(roi),max(roi)), linetype="dotted") +
   coord_flip(expand = F)  +
   xlim(c(min(in.d.hap$w), max(in.d.hap$w))) +

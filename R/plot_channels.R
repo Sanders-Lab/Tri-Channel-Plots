@@ -1,4 +1,8 @@
 ###############################################################################
+source("R/dev/bamregion2ranges.R")
+source("R/dev/haplotagger.R")
+source("R/dev/misc.R")
+
 #dev of tri channel plotting function
 plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chromosome = NULL, roi = NULL) {
   
