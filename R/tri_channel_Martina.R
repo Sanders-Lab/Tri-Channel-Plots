@@ -42,11 +42,11 @@ d.hap <- haplotaggeR(haplotag.bams.path = "/fast/groups/ag_sanders/scratch/bendy
 
 ###############################  FUNCTION  ###################################
 #For now only works for whole chromosomes, so dont use plot_range please!
-plot_trichannel(cell_ID = "i563", #keep string format!!!!
+plot_channels(cell_ID = "i563", #keep string format!!!!
                   roi = c(74000000:120000000), #highlight region with dotted lines, if not supplied vanishes
-                  plot_range = NULL, # DO NOT USE FOR NOW!!
+                  plot_range = , # DO NOT USE FOR NOW!!
                   chromosome =  "chr7",
-                  channels = 5) #choose chromosome to plot
+                  channels = 3) #choose chromosome to plot
 ##############################################################################
 
 
