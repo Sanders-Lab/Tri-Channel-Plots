@@ -19,7 +19,7 @@ Function Parameters:
 - channels (e.g. 1-4)
 - plot_range (e.g. c(40000000,120000000))
 - roi (e.g. c(7500000,85000000)
-- 
+
 # Roadmap
 
 # 📕 Technical features
@@ -30,14 +30,14 @@ Function Parameters:
 - [ ] Update ggarrange composition based on channels ID after including merged haps
 - [X] Region of interest highlighting
 - [ ] Add Counts channel (hisogram plot)
-- [ ] loop through all cells of samples for given ranges for manual curation of hotspots
+- [ ] loop through all cells of samples for given ranges for manual curation of hotspots (sample param)
 
 # 🛑 Small issues
 
-- [X] Scaling
-- [ ] Input parameter checks especially for channels beeing either 1,2,3 or 4 for now!
+- [ ] Scaling
+- [X] Input parameter checks especially for channels beeing either 1,2,3 or 4 for now!
 - [ ] Formatting of breaks in smaller regions (scale_mb function)
-- [ ] subsetting is slow
+- [X] subsetting is slow
 - [ ] parallelization for haplotagger
 
 Example output plot:
@@ -47,6 +47,6 @@ Example output plot:
 # Authors
 - [Patrick Weidner](https://github.com/pweidner)
 - [Suharto Bannerjee](https://github.com/suhartobanerjee)
-- David Porubsky wrote some of the functions were sourcing!
+- David Porubsky wrote some of the functions were sourcing here, thanks!
 
 Please contact us with any problems or submit them as an issue in this Github repository.
