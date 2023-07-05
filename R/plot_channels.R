@@ -4,7 +4,7 @@ source("R/dev/haplotagger.R")
 source("R/dev/misc.R")
 
 #dev of tri channel plotting function
-plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chromosome = NULL, roi = NULL) {
+plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chromosome = NULL, roi = NULL, count = F) {
   
   #check whether count data needs to be wrangled for plotting (safes time in function later i assume)
   message("Setting filters:")
@@ -37,6 +37,13 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     ind <- d %>% 
       filter(cell == cell_ID & chrom == chromosome)
     in.d <- melt(ind, measure.vars = c("c", "w"))
+    
+    #Generate plot responsive values
+    bin_width <- median(ind$end - ind$start)
+    reads_per_bin <- round(median(ind$w + ind$c), 2) 
+    total_reads <- sum(ind$c + ind$w)
+    y_limit <- round(1.3*reads_per_bin+1, 2)
+    plot_lim = c(min((ind$start+ind$end)/2),max((ind$start+ind$end)/2))
   } else {
     # split haplotypes into plotting df
     message("Fetching haplotype data for cell ", cell_ID, " in range ", min(plot_range), " to ", max(plot_range), " ...")
@@ -65,29 +72,59 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
              start >= min(plot_range) &
              end <= max(plot_range))
     in.d <- melt(ind, measure.vars = c("c", "w"))
+    
+    #Generate plot responsive values
+    bin_width <- median(ind$end - ind$start)
+    reads_per_bin <- round(median(ind$w + ind$c), 2) 
+    total_reads <- sum(ind$c + ind$w)
+    y_limit <- round(1.3*reads_per_bin+1, 2)
+    plot_lim = c(min(plot_range),max(plot_range))
   }
   message("Data fetch complete!")
   ############################PLOT W:C ratios for genomic_range##################
   message("Plotting strand states ...")
   bar_width = median(in.d$end - in.d$start)
-  plt1 <- ggplot(in.d) +
-    geom_col(aes(x = (start+end)/2, y = value, fill = variable), width=bar_width, position = "fill")+
-    scale_fill_manual(values=c("paleturquoise4", "sandybrown"), name='Strand') +
-    coord_flip(expand=F) +
-    # formatting
-    ggtitle(cell_ID) +
-    xlab("Genomic position")+
-    ylab("W:C ratio")+
-    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
-    scale_y_continuous(breaks = c(0,0.5,1.0)) +
-    theme_bw() +
-    theme(panel.spacing = unit(0.4, "lines"),
-          strip.placement = 'outside',
-          strip.background = element_rect(fill = NA, colour=NA),
-          legend.position = "none",
-          plot.title = element_text(hjust = 0.5, size = 11),
-          plot.margin = margin(t = 5.5, r = 4.5, b = 5.5, l = 4.5, unit = "mm")) +
-    guides(fill = FALSE)
+  if (isFALSE(count)) {
+    plt1 <- ggplot(in.d) +
+      geom_col(aes(x = (start+end)/2, y = value, fill = variable), width=bar_width, position = "fill")+
+      scale_fill_manual(values=c("paleturquoise4", "sandybrown"), name='Strand') +
+      coord_flip(expand=F) +
+      ggtitle(cell_ID) +
+      xlab("Genomic position")+
+      ylab("W:C ratio")+
+      scale_x_continuous(breaks = pretty_breaks(15),
+                         labels = format_Mb,
+                         limits = plot_lim) +
+      scale_y_continuous(breaks = c(0,0.5,1.0)) +
+      theme_bw() +
+      theme(panel.spacing = unit(0.4, "lines"),
+            strip.placement = 'outside',
+            strip.background = element_rect(fill = NA, colour=NA),
+            legend.position = "none",
+            plot.title = element_text(hjust = 0.5, size = 11),
+            plot.margin = margin(t = 5.5, r = 4.5, b = 5.5, l = 4.5, unit = "mm")) +
+      guides(fill = FALSE)
+  } else {
+    plt1 <- ggplot(ind) +
+      geom_hline(yintercept = 0, alpha = 0.4) +
+      geom_rect(aes(xmin=start, xmax=end, ymin = -w, ymax = 0), fill='sandybrown') +
+      geom_rect(aes(xmin=start, xmax=end, ymin = 0, ymax = c), fill='paleturquoise4') +
+      coord_flip(expand = F, ylim=c(-y_limit, y_limit)) +
+      labs(x="Genomic Position", y = "Watson | Crick   ") +
+      scale_x_continuous(breaks = pretty_breaks(12),
+                         labels = format_Mb,
+                         limits = plot_lim) +
+      ggtitle(cell_ID) +
+      scale_y_continuous(breaks = pretty_breaks(3)) +
+      theme_bw() +
+      theme(panel.spacing = unit(0.4, "lines"),
+            strip.placement = 'outside',
+            strip.background = element_rect(fill = NA, colour=NA),
+            legend.position = "none",
+            plot.title = element_text(hjust = 0.5, size = 11),
+            plot.margin = margin(t = 5.5, r = 4.5, b = 5.5, l = 4.5, unit = "mm")) +
+      guides(fill = FALSE)
+  }
   
   if (!is.null(roi)) {
     plt1 <- plt1 +
@@ -105,7 +142,9 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     # formatting
     coord_flip(expand = F) +
     xlab("Genomic Position")+ylab("Depth") +
-    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
+    scale_x_continuous(breaks = pretty_breaks(15),
+                       labels = format_Mb,
+                       limits = plot_lim) +
     scale_y_continuous(breaks = pretty_breaks(5), limits = c(0, y_lim)) + 
     theme_bw() +
     theme(panel.spacing = unit(0.4, "lines"),
@@ -144,7 +183,9 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     coord_flip(expand = F)  +
     xlim(c(min(in.d.hap$w), max(in.d.hap$w))) +
     ylab("Phase") +
-    scale_x_continuous(breaks = pretty_breaks(10), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
+    scale_x_continuous(breaks = pretty_breaks(10),
+                       labels = format_Mb,
+                       limits = plot_lim) +
     scale_y_continuous(breaks = pretty_breaks(2), limits = c(-1.2,1.2)) +
     scale_color_gradient(low = "red", high =  "blue") +
     theme_bw() +
@@ -175,7 +216,9 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     geom_point(data=in.d.hap1[in.d.hap1$c!=0,], aes(y=c),  size=3, color="red") +
     coord_flip(expand = F)  +
     ylab("H1") +
-    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
+    scale_x_continuous(breaks = pretty_breaks(15),
+                       labels = format_Mb,
+                       limits = plot_lim) +
     scale_y_continuous(breaks = pretty_breaks(2), limits = c(-1.2,1.2)) +
     theme_bw() +
     theme(panel.spacing = unit(0.4, "lines"),
@@ -205,7 +248,9 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     geom_point(data=in.d.hap2[in.d.hap2$c!=0,],aes(y=c), size=3, color="blue") +
     coord_flip(expand = F)  +
     ylab("H2") +
-    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
+    scale_x_continuous(breaks = pretty_breaks(15),
+                       labels = format_Mb,
+                       limits = plot_lim) +
     scale_y_continuous(breaks = pretty_breaks(2), limits = c(-1.2,1.2)) +
     theme_bw() +
     theme(panel.spacing = unit(0.4, "lines"),
@@ -217,7 +262,7 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
           plot.margin = margin(t = 5.5, r = 5.5, b = 5.5, l = 5.5, unit = "mm")) +
     ggtitle(cell_ID) +
     guides(fill = "none")
-  )
+)
   if (!is.null(roi)) {
     plt5 <- plt5 +
       geom_vline(xintercept = roi, linetype="dotted", size = 1.1)
