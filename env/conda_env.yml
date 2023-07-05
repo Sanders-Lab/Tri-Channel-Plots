@@ -323,3 +323,4 @@ dependencies:
   - yq=3.2.2=pyhd8ed1ab_0
   - zlib=1.2.13=hd590300_5
   - zstd=1.5.2=h3eb15da_6
+prefix: /data/gpfs-1/users/pweidne_m/work/miniconda3/envs/channels
