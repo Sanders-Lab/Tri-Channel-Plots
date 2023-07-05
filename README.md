@@ -14,10 +14,11 @@ Input files:
 - d.hap <- run haplotagger on bam files in the haplotag folder or import such table
 
 Function Parameters:
-- cell_ID (e.g. "i504")
+- cell_ID (as in your table, e.g. "i504" or "P1530_i504")
 - chromosome (e.g. "chr2")
-- channels (e.g. 1-4)
+- channels (1=State, 2=Depth, 3=Haps (merged), 4 = Haps (split))
 - plot_range (e.g. c(40000000,120000000))
+- count = FALSE (e.g. show count plot instead of W:C ratio)
 - roi (e.g. c(7500000,85000000)
 
 # Roadmap
@@ -29,16 +30,16 @@ Function Parameters:
 - [X] General option to chose combination of channel plots through numeric ID (e.g. 3=classical trichannel, 4= same but split haps etc.)
 - [X] Update ggarrange composition based on channels ID after including merged haps
 - [X] Region of interest highlighting
-- [ ] Add Counts channel (hisogram plot)
+- [X] Add Counts channel (hisogram plot)
 - [ ] Unified title including set params
 - [ ] coord_flip = T option to plot horizontal version
 - [ ] gene = "CD3" param to zoom in on genomic ranges of interest
 - [ ] margin = 2 param exclusive to plot_range that set a margin to plot around roi/gene
 - [ ] loop through all cells of samples for given ranges for manual curation of hotspots (sample param)
 - [ ] parallelization for haplotagger
-- [ ] 
+
 # 🛑 Small issues
-- [ ] filtering for whole chromosomes when plot_range=NULL corrently not working
+- [X] filtering for whole chromosomes when plot_range=NULL corrently not working
 - [X] Scaling
 - [X] Input parameter checks especially for channels beeing either 1,2,3 or 4 for now!
 - [X] Formatting of breaks in smaller regions (scale_mb function)
