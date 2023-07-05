@@ -43,27 +43,27 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     in.d.hap1 <- d.hap %>% 
       filter(cell == cell_ID &
              chrom == chromosome &
-             start > min(plot_range) &
-             end < max(plot_range) &
+             start >= min(plot_range) &
+             end <= max(plot_range) &
              hp == 1)
     in.d.hap2 <- d.hap %>% 
       filter(cell == cell_ID &
                chrom == chromosome &
-               start > min(plot_range) &
-               end < max(plot_range) &
+               start >= min(plot_range) &
+               end <= max(plot_range) &
                hp == 2)
     in.d.hap <- d.hap %>% 
       filter(cell == cell_ID &
              chrom == chromosome &
-             start > min(plot_range) &
-             end < max(plot_range))
+             start >= min(plot_range) &
+             end <= max(plot_range))
     #filter out roi data here depending on what youre analysing (remove/add arguments as needed)
     message("Fetching count data for ", cell_ID, " in range ", min(plot_range), " to ", max(plot_range), " ...")
     ind <- d %>% 
       filter(cell == cell_ID &
              chrom == chromosome &
-             start > min(plot_range) &
-             end < max(plot_range))
+             start >= min(plot_range) &
+             end <= max(plot_range))
     in.d <- melt(ind, measure.vars = c("c", "w"))
   }
   message("Data fetch complete!")
@@ -78,19 +78,20 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     ggtitle(cell_ID) +
     xlab("Genomic position")+
     ylab("W:C ratio")+
-    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb) +
+    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
     scale_y_continuous(breaks = c(0,0.5,1.0)) +
     theme_bw() +
     theme(panel.spacing = unit(0.4, "lines"),
           strip.placement = 'outside',
           strip.background = element_rect(fill = NA, colour=NA),
           legend.position = "none",
-          plot.title = element_text(hjust = 0.5, size = 11)) +
+          plot.title = element_text(hjust = 0.5, size = 11),
+          plot.margin = margin(t = 5.5, r = 4.5, b = 5.5, l = 4.5, unit = "mm")) +
     guides(fill = FALSE)
   
   if (!is.null(roi)) {
     plt1 <- plt1 +
-      geom_vline(xintercept = c(min(roi),max(roi)), linetype="dotted", size = 1.1)
+      geom_vline(xintercept = roi, linetype="dotted", size = 1.1)
   }
   
   ###############################PLOT read depth#################################
@@ -104,7 +105,7 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     # formatting
     coord_flip(expand = F) +
     xlab("Genomic Position")+ylab("Depth") +
-    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb) +
+    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
     scale_y_continuous(breaks = pretty_breaks(5), limits = c(0, y_lim)) + 
     theme_bw() +
     theme(panel.spacing = unit(0.4, "lines"),
@@ -112,13 +113,14 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
           strip.placement = 'outside',
           strip.background = element_rect(fill = NA, colour=NA),
           legend.position = "none",
-          plot.title = element_text(hjust = 0.5, size = 11)) +
+          plot.title = element_text(hjust = 0.5, size = 11),
+          plot.margin = margin(t = 5.5, r = 4.5, b = 5.5, l = 4.5, unit = "mm")) +
     ggtitle(cell_ID) +
     guides(fill = FALSE)
   
   if (!is.null(roi)) {
     plt2 <- plt2 +
-      geom_vline(xintercept = c(min(roi),max(roi)), linetype="dotted", size = 1.1)
+      geom_vline(xintercept = roi, linetype="dotted", size = 1.1)
   }
 
 #############################PLOT haplotag lollis merged ######################
@@ -139,11 +141,10 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     geom_point(data=in.d.hap[in.d.hap$c!=0,],
                aes(y=c, color=hp),
                size=3) +
-    geom_vline(xintercept = c(min(roi),max(roi)), linetype="dotted") +
     coord_flip(expand = F)  +
     xlim(c(min(in.d.hap$w), max(in.d.hap$w))) +
     ylab("Phase") +
-    scale_x_continuous(breaks = pretty_breaks(10), labels = format_Mb) +
+    scale_x_continuous(breaks = pretty_breaks(10), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
     scale_y_continuous(breaks = pretty_breaks(2), limits = c(-1.2,1.2)) +
     scale_color_gradient(low = "red", high =  "blue") +
     theme_bw() +
@@ -153,22 +154,28 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
           strip.placement = 'outside',
           strip.background = element_rect(fill = NA, colour=NA),
           legend.position = "none",
-          plot.title = element_text(hjust = 0.5)) +
+          plot.title = element_text(hjust = 0.5),
+          plot.margin = margin(t = 5.5, r = 4.5, b = 5.5, l = 4.5, unit = "mm")) +
     guides(fill = "none")
   )
+  
+  if (!is.null(roi)) {
+    plt3 <- plt3 +
+      geom_vline(xintercept = roi, linetype="dotted", size = 1.1)
+  }
 #############################PLOT haplotag lollis H1 ##########################
   message("Plotting H1 ...")
+  suppressMessages(
   plt4 <- ggplot(in.d.hap1) +
     aes(x = ((start+end)/2)) +
     ### REPLACED WITH LINE+BALL 
-    geom_linerange(data=in.d.hap1[in.d.hap1$w!=0,], aes(ymin=0, ymax=-w), size=.4, color="red", alpha = 0.2) + # SNPs on W reads (right)
-    geom_linerange(data=in.d.hap1[in.d.hap1$c!=0,], aes(ymin=0, ymax=c),  size=.4, color="red", alpha = 0.2) + # SNPs on C reads (left)
-    geom_point(data=in.d.hap1[in.d.hap1$w!=0,], aes(y=-w), size=2, color="red") +
-    geom_point(data=in.d.hap1[in.d.hap1$c!=0,], aes(y=c),  size=2, color="red") +
+    geom_linerange(data=in.d.hap1[in.d.hap1$w!=0,], aes(ymin=0, ymax=-w), size=1.5, color="red", alpha = 0.3) + # SNPs on W reads (right)
+    geom_linerange(data=in.d.hap1[in.d.hap1$c!=0,], aes(ymin=0, ymax=c),  size=1.5, color="red", alpha = 0.3) + # SNPs on C reads (left)
+    geom_point(data=in.d.hap1[in.d.hap1$w!=0,], aes(y=-w), size=3, color="red") +
+    geom_point(data=in.d.hap1[in.d.hap1$c!=0,], aes(y=c),  size=3, color="red") +
     coord_flip(expand = F)  +
-    #formatting
     ylab("H1") +
-    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb) +
+    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
     scale_y_continuous(breaks = pretty_breaks(2), limits = c(-1.2,1.2)) +
     theme_bw() +
     theme(panel.spacing = unit(0.4, "lines"),
@@ -176,28 +183,29 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
           strip.placement = 'outside',
           strip.background = element_rect(fill = NA, colour=NA),
           legend.position = "none",
-          plot.title = element_text(hjust = 0.5, size = 11)) +
+          plot.title = element_text(hjust = 0.5, size = 11),
+          plot.margin = margin(t = 5.5, r = 4.5, b = 5.5, l = 4.5, unit = "mm")) +
     ggtitle(cell_ID) +
     guides(fill = "none")
-  
+  )
   if (!is.null(roi)) {
     plt4 <- plt4 +
-      geom_vline(xintercept = c(min(roi),max(roi)), linetype="dotted", size = 1.1)
+      geom_vline(xintercept = roi, linetype="dotted", size = 1.1)
   }
   
 #############################PLOT haplotag lollis H2 ##########################
   message("Plotting H2 ...")
+  suppressMessages(
   plt5 <- ggplot(in.d.hap2) +
     aes(x = ((start+end)/2)) +
     ### REPLACED WITH LINE+BALL 
-    geom_linerange(data=in.d.hap2[in.d.hap2$w!=0,], aes(ymin=0, ymax=-w), size=.4, color="blue", alpha = 0.2) + # SNPs on W reads (right)
-    geom_linerange(data=in.d.hap2[in.d.hap2$c!=0,], aes(ymin=0, ymax=c), size=.4, color="blue", alpha = 0.2) + # SNPs on C reads (left)
-    geom_point(data=in.d.hap2[in.d.hap2$w!=0,], aes(y=-w), size=2, color="blue") +
-    geom_point(data=in.d.hap2[in.d.hap2$c!=0,],aes(y=c), size=2, color="blue") +
+    geom_linerange(data=in.d.hap2[in.d.hap2$w!=0,], aes(ymin=0, ymax=-w), size=1.5, color="blue", alpha = 0.3) + # SNPs on W reads (right)
+    geom_linerange(data=in.d.hap2[in.d.hap2$c!=0,], aes(ymin=0, ymax=c), size=1.5, color="blue", alpha = 0.3) + # SNPs on C reads (left)
+    geom_point(data=in.d.hap2[in.d.hap2$w!=0,], aes(y=-w), size=3, color="blue") +
+    geom_point(data=in.d.hap2[in.d.hap2$c!=0,],aes(y=c), size=3, color="blue") +
     coord_flip(expand = F)  +
-    #formatting
     ylab("H2") +
-    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb) +
+    scale_x_continuous(breaks = pretty_breaks(15), labels = format_Mb, limits = c(min(plot_range),max(plot_range))) +
     scale_y_continuous(breaks = pretty_breaks(2), limits = c(-1.2,1.2)) +
     theme_bw() +
     theme(panel.spacing = unit(0.4, "lines"),
@@ -205,13 +213,14 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
           strip.placement = 'outside',
           strip.background = element_rect(fill = NA, colour=NA),
           legend.position = "none",
-          plot.title = element_text(hjust = 0.5, size = 11)) +
+          plot.title = element_text(hjust = 0.5, size = 11),
+          plot.margin = margin(t = 5.5, r = 5.5, b = 5.5, l = 5.5, unit = "mm")) +
     ggtitle(cell_ID) +
     guides(fill = "none")
-  
+  )
   if (!is.null(roi)) {
     plt5 <- plt5 +
-      geom_vline(xintercept = c(min(roi),max(roi)), linetype="dotted", size = 1.1)
+      geom_vline(xintercept = roi, linetype="dotted", size = 1.1)
   }
   
   ############################triple plot########################################
@@ -235,3 +244,24 @@ plot_channels <- function(cell_ID, plot_range = NULL, channels = c(4,3,2,1), chr
     }
   }
 }
+
+# title <- ggdraw() + 
+#   draw_label(
+#     paste("Data channels for cell ", cell_ID, ":"),
+#     fontface = 'bold',
+#     x = 0,
+#     hjust = 0
+#   ) +
+#   theme(
+#     # add margin on the left of the drawing canvas,
+#     # so title is aligned with left edge of first plot
+#     plot.margin = margin(0, 0, 0, 7)
+#   )
+# tri_plot <- plot_grid(
+#   title, plt1,
+#   nrow = 1,
+#   # rel_heights values control vertical title margins
+#   rel_heights = c(0.1, 1),
+#   align = "v"
+# )
+# 
