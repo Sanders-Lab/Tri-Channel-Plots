@@ -27,18 +27,23 @@ Function Parameters:
 - [X] Option to split H1 and H2 in seperate plots
 - [ ] Option to plot sv call track along the plotting region
 - [X] General option to chose combination of channel plots through numeric ID (e.g. 3=classical trichannel, 4= same but split haps etc.)
-- [ ] Update ggarrange composition based on channels ID after including merged haps
+- [X] Update ggarrange composition based on channels ID after including merged haps
 - [X] Region of interest highlighting
 - [ ] Add Counts channel (hisogram plot)
+- [ ] Unified title including set params
+- [ ] coord_flip = T option to plot horizontal version
+- [ ] gene = "CD3" param to zoom in on genomic ranges of interest
+- [ ] margin = 2 param exclusive to plot_range that set a margin to plot around roi/gene
 - [ ] loop through all cells of samples for given ranges for manual curation of hotspots (sample param)
-
-# 🛑 Small issues
-
-- [ ] Scaling
-- [X] Input parameter checks especially for channels beeing either 1,2,3 or 4 for now!
-- [ ] Formatting of breaks in smaller regions (scale_mb function)
-- [X] subsetting is slow
 - [ ] parallelization for haplotagger
+- [ ] 
+# 🛑 Small issues
+- [ ] filtering for whole chromosomes when plot_range=NULL corrently not working
+- [X] Scaling
+- [X] Input parameter checks especially for channels beeing either 1,2,3 or 4 for now!
+- [X] Formatting of breaks in smaller regions (scale_mb function)
+- [X] subsetting is slow
+
 
 Example output plot:
 
@@ -47,6 +52,6 @@ Example output plot:
 # Authors
 - [Patrick Weidner](https://github.com/pweidner)
 - [Suharto Bannerjee](https://github.com/suhartobanerjee)
-- David Porubsky wrote some of the functions were sourcing here, thanks!
+- David Porubsky wrote the bamregion2ranges.R function! :)
 
 Please contact us with any problems or submit them as an issue in this Github repository.
