@@ -5,7 +5,7 @@ source("R/plot_channels.R")
 # Load or automatically install libraries
 libs <- c("data.table", "ggplot2", "scales", "GenomicRanges", "readr",
           "tidyverse", "cowplot", "ggformula", "reshape2", "GenomicAlignments",
-          "Rsamtools")
+          "Rsamtools", "utils")
 if (!require(libs, quietly = TRUE)) {
   BiocManager::install(libs)
 }
@@ -19,16 +19,15 @@ lapply(libs, require, character.only = TRUE)
 ##############################################################################
 
 # Load count and hap data for all cells if available
-d <- fread("data/raw/AGLCD.txt.gz") # scTRIP count output
+d <- fread("/fast/groups/ag_sanders/scratch/kiwi_tmp/Martina/UC17_D/UC17_D/counts/UC17_D.txt.gz") # scTRIP count output
 d.hap <- fread("data/proc/P1530_singleCell_haplotagData.txt") # generate below
 
 # Run only once if not done on files yet
-# d.hap <- haplotaggeR(haplotag.bams.path = "haplotag/bam/",
-#                      chromosomes = paste0("chr", c(1:22, "X", "Y")),
-#                      output = "P1530_singleCell_haplotagData.txt") 
+# d.hap <- haplotagger(haplotag.bams.path = "/fast/groups/ag_sanders/scratch/kiwi_tmp/Martina/UC17_D/UC17_D/haplotag/bam/",
+#                      output = "UC17_D_singleCell_haplotagData.txt")
 
-plot_channels(cell_ID = "i567",
-              chromosome = "chr2",
+plot_channels(cell_ID = "P1530_i414",
+              chromosome = "chr16",
               channels = 4,
-              plot_range = NULL,
-              roi = NULL)
+              plot_range = c(4000000,9000000),
+              roi = c(6019024,7713340))

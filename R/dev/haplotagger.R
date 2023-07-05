@@ -1,6 +1,6 @@
 #generate hap_data from haplotagData_plottingTable.R here
 haplotagger <- function(haplotag.bams.path, chromosomes = paste0("chr", c(1:22, "X")), output = NULL) {
-  haplotag.bams <- list.files(path = haplotag.bams.path, pattern = "\\.bam$", full.names = T) #read in bam paths
+  haplotag.bams <- list.files(path = haplotag.bams.path, pattern = "\\.htg$", full.names = T) #read in bam paths
   #create empty starting data frame for loop
   d.hap <- data.frame()
   pb = txtProgressBar(min = 0, max = length(haplotag.bams), initial = 0, style = 3, title = "Running HaplotaggeR", label = "Progress: ")
@@ -31,6 +31,7 @@ haplotagger <- function(haplotag.bams.path, chromosomes = paste0("chr", c(1:22, 
   }
   #close progress bar after last iteration to print new lines from here
   close(pb)
+  
   #write table all.counts to outdir after wrangling data types
   d.hap$cell <- as.character(d.hap$cell)
   d.hap$chrom <- as.character(d.hap$chrom)
@@ -39,7 +40,9 @@ haplotagger <- function(haplotag.bams.path, chromosomes = paste0("chr", c(1:22, 
   d.hap$start <- as.numeric(d.hap$start)
   d.hap$end <- as.numeric(d.hap$end)
   d.hap$hp <- as.numeric(d.hap$hp)
+  
   return(d.hap)
+  
   if (!is.null(output)) {
     write.table(d.hap, file = output, quote = FALSE, row.names = FALSE)
   }
