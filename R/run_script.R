@@ -5,7 +5,7 @@ source("R/plot_channels.R")
 # Load or automatically install libraries
 libs <- c("data.table", "ggplot2", "scales", "GenomicRanges", "readr",
           "tidyverse", "cowplot", "ggformula", "reshape2", "GenomicAlignments",
-          "Rsamtools", "utils")
+          "Rsamtools", "R.utils")
 if (!require(libs, quietly = TRUE)) {
   BiocManager::install(libs)
 }
