@@ -1,4 +1,4 @@
-# Strand-seq Channel plots
+# :sunflower: Strand-seq Channel plots
 R functions for combinatorial data channel plotting of scTRIP single cell Strand-seq data.
 
 # Usage
@@ -7,7 +7,7 @@ R functions for combinatorial data channel plotting of scTRIP single cell Strand
 ```bash
 git clone https://github.com/pweidner/tri-channel-plots
 ```
-2. Launch plot_channels function from run_script.R
+2. Open the run_script.R and run the plot_channels function
 
 Input files:
 - d <- scTRIP counts output file (e.g. AGLCD.txt.gz)
@@ -55,4 +55,4 @@ Example output plot:
 - [Suharto Bannerjee](https://github.com/suhartobanerjee)
 - David Porubsky wrote the bamregion2ranges.R function! :)
 
-Please contact us with any problems or submit them as an issue in this Github repository.
+:mailbox_with_mail:  Please contact us with any problems or submit them as an issue in this Github repository.
