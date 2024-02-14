@@ -1,4 +1,4 @@
-# :sunflower: Strand-seq Channel plots
+# :sunflower: Strand-seq tri-channel plots
 R functions for plotting of single cell Strand-seq tri channel processing data.
 
 # Usage
