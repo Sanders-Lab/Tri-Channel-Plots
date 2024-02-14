@@ -1,5 +1,5 @@
 # :sunflower: Strand-seq Channel plots
-R functions for combinatorial data channel plotting of scTRIP single cell Strand-seq data.
+R functions for plotting of single cell Strand-seq tri channel processing data.
 
 # Usage
 1. Clone the repository
