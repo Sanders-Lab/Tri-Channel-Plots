@@ -9,17 +9,17 @@ git clone https://github.com/pweidner/tri-channel-plots
 ```
 2. Open the run_script.R and run the plot_channels function
 
-Input files:
-- d <- scTRIP counts output file (e.g. AGLCD.txt.gz)
-- d.hap <- run haplotagger on bam files in the haplotag folder or import such table
+To do so you will have to provide the following input files:
+- d <- scTRIP counts output file (e.g. `HD1.txt.gz`)
+- d.hap <- run haplotagger on bam files in the `haplotag` folder (or import such table after running it once)
 
-Function Parameters:
-- cell_ID (as in your table, e.g. "i504" or "P1530_i504")
-- chromosome (e.g. "chr2")
-- channels (1=State, 2=Depth, 3=Haps (merged), 4 = Haps (split))
-- plot_range (e.g. c(40000000,120000000))
-- count = FALSE (e.g. show count plot instead of W:C ratio)
-- roi (e.g. c(7500000,85000000)
+Here are some function parameters you can tweak:
+- cell_ID (subsets for cells, "i504" or "P1530_i504")
+- chromosome (subsets for chr, e.g. "chr2")
+- channels (What channels to display: 1=State, 2=Depth, 3=Haps (merged), 4 = Haps (split))
+- plot_range (subsets for ranges, e.g. c(40000000,120000000))
+- count = FALSE (switches between count plot or W:C ratio, default W:C)
+- roi (adds highlight into the plot, e.g. c(7500000,85000000)
 
 # Roadmap
 
