@@ -1,5 +1,5 @@
 # :sunflower: Strand-seq tri-channel plots
-R functions for plotting of single cell Strand-seq tri channel processing data.
+R functions for tri channel plotting of single cell Strand-seq data.
 
 # Usage
 1. Clone the repository
